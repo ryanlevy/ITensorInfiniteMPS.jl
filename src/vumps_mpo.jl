@@ -35,15 +35,15 @@ function initialize_left_environment(
   sit = inds(H[n + 1][1, 1])
   link = commonind(ψ.AL[n], ψ.AL[n + 1])
   Ls = Vector{ITensor}(undef, dₕ)
-  Ls[1] = ITensor(Float64, link, dag(prime(link)))
+  Ls[1] = similar(ψ.AL[n], link, dag(prime(link)))
   if init_last
     Ls[end] = denseblocks(δ(link, dag(prime(link))))
   else
-    Ls[end] = ITensor(Float64, link, dag(prime(link)))
+    Ls[end] = similar(ψ.AL[n], link, dag(prime(link)))
   end
   for j in 2:(dₕ - 1)
     mpo_link = only(uniqueinds(H[n + 1][j, 1], sit))
-    Ls[j] = ITensor(Float64, dag(mpo_link), link, dag(prime(link)))
+    Ls[j] = similar(ψ.AL[n], dag(mpo_link), link, dag(prime(link)))
   end
   return Ls
 end
@@ -185,15 +185,15 @@ function initialize_right_environment(
   sit = inds(H[n - 1][1, 1])
   link = commonind(ψ.AR[n], ψ.AR[n - 1])
   Rs = Vector{ITensor}(undef, dₕ)
-  Rs[end] = ITensor(Float64, link, dag(prime(link)))
+  Rs[end] = similar(ψ.AR[n], link, dag(prime(link)))
   if init_first
     Rs[1] = denseblocks(δ(link, dag(prime(link))))
   else
-    Rs[1] = ITensor(Float64, link, dag(prime(link)))
+    Rs[1] = similar(ψ.AR[n], link, dag(prime(link)))
   end
   for j in 2:(dₕ - 1)
     mpo_link = only(uniqueinds(H[n - 1][1, j], sit))
-    Rs[j] = ITensor(Float64, dag(mpo_link), link, dag(prime(link)))
+    Rs[j] = similar(ψ.AR[n], dag(mpo_link), link, dag(prime(link)))
   end
   return Rs
 end

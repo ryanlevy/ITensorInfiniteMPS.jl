@@ -344,8 +344,9 @@ function tdvp_iteration_sequential(
   Ãᶜ = InfiniteMPS(Vector{ITensor}(undef, Nsites))
   Ãᴸ = InfiniteMPS(Vector{ITensor}(undef, Nsites))
   Ãᴿ = InfiniteMPS(Vector{ITensor}(undef, Nsites))
-  eᴸ = Vector{Float64}(undef, Nsites)
-  eᴿ = Vector{Float64}(undef, Nsites)
+  type = eltype(ψ.AL[1])
+  eᴸ = Vector{type}(undef, Nsites)
+  eᴿ = Vector{type}(undef, Nsites)
 
   for n in 1:Nsites
     ψᴴ = dag(ψ)

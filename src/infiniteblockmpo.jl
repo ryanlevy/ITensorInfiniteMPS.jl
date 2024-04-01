@@ -141,8 +141,9 @@ function local_mpo_block_projectors(is::Index; tags=tags(is))
     middle = ITensor(copy(mat), new_ind, dag(is))
   else
     new_ind = Index(is.space[2:(end - 1)]; dir=dir(is), tags=tags)
+    type = eltype(mat)
     middle = ITensors.BlockSparseTensor(
-      Float64,
+      type,
       undef,
       Block{2}[Block(x, x + 1) for x in 1:length(new_ind.space)],
       (new_ind, dag(is)),
@@ -247,15 +248,15 @@ function combineblocks_linkinds_auxiliary(H::InfiniteBlockMPO)
       comb_ind = combinedind(comb)
       for k in 1:size(H[j], 1)
         if isempty(H[j][k, d])
-          H[j][k, d] = ITensor(Float64, uniqueinds(H[j][k, d], right_link)..., comb_ind)
+          H[j][k, d] = similar(H[1], uniqueinds(H[j][k, d], right_link)..., comb_ind)
         else
           H[j][k, d] = H[j][k, d] * comb
         end
       end
       for k in 1:size(H[j + 1], 2)
         if isempty(H[j + 1][d, k])
-          H[j + 1][d, k] = ITensor(
-            Float64, uniqueinds(H[j + 1][d, k], dag(right_link))..., dag(comb_ind)
+          H[j + 1][d, k] = similar(
+             H[1], uniqueinds(H[j + 1][d, k], dag(right_link))..., dag(comb_ind)
           )
         else
           H[j + 1][d, k] = H[j + 1][d, k] * dag(comb)
@@ -274,15 +275,15 @@ function combineblocks_linkinds_auxiliary(H::InfiniteBlockMPO)
     comb_ind2 = translatecell(translator(H), comb_ind, -1)
     for k in 1:size(H[N], 1)
       if isempty(H[N][k, d])
-        H[N][k, d] = ITensor(Float64, uniqueinds(H[N][k, d], right_link)..., comb_ind)
+        H[N][k, d] = similar(H[1], uniqueinds(H[N][k, d], right_link)..., comb_ind)
       else
         H[N][k, d] = H[N][k, d] * comb
       end
     end
     for k in 1:size(H[1], 2)
       if isempty(H[1][d, k])
-        H[1][d, k] = ITensor(
-          Float64,
+        H[1][d, k] = similar(
+          H[1],
           uniqueinds(H[1][d, k], dag(translatecell(translator(H), right_link, -1)))...,
           dag(comb_ind2),
         )

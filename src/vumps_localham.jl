@@ -78,8 +78,9 @@ function tdvp_iteration_sequential(
   Ãᶜ = InfiniteMPS(Vector{ITensor}(undef, Nsites), translator(ψ))
   Ãᴸ = InfiniteMPS(Vector{ITensor}(undef, Nsites), translator(ψ))
   Ãᴿ = InfiniteMPS(Vector{ITensor}(undef, Nsites), translator(ψ))
-  eᴸ = Vector{Float64}(undef, Nsites)
-  eᴿ = Vector{Float64}(undef, Nsites)
+  type = eltype(ψ.AL[1])
+  eᴸ = Vector{type}(undef, Nsites)
+  eᴿ = Vector{type}(undef, Nsites)
   for n in 1:Nsites
     hᴸ = InfiniteMPS([
       δ(only(l[k - 2]), only(l′[k - 2])) *

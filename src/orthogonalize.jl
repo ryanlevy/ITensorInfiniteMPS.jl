@@ -121,8 +121,18 @@ function ortho_overlap(AC, C)
   return noprime(AL)
 end
 
+function polar_typesafe(A::ITensor, Linds...)
+  U, S, V = svd(A, Linds...)
+  u = commoninds(S, U)
+  v = commoninds(S, V)
+  δᵤᵥ′ = δ(Bool,u..., v'...)
+  Q = U * δᵤᵥ′ * V'
+  P = dag(V') * dag(δᵤᵥ′) * S * V
+  return Q, P, commoninds(Q, P)
+end
+
 function ortho_polar(AC, C)
-  UAC, _ = polar(AC, uniqueinds(AC, C))
-  UC, _ = polar(C, commoninds(C, AC))
+  UAC, _ = polar_typesafe(AC, uniqueinds(AC, C))
+  UC, _ = polar_typesafe(C, commoninds(C, AC))
   return noprime(UAC) * noprime(dag(UC))
 end

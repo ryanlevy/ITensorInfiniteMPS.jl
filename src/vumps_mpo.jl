@@ -365,8 +365,8 @@ function tdvp_iteration_sequential(
   Ãᴸ = InfiniteMPS(Vector{ITensor}(undef, N))
   Ãᴿ = InfiniteMPS(Vector{ITensor}(undef, N))
 
-  eL = zeros(N)
-  eR = zeros(N)
+  eL = zeros(eltype(ψ[1]),N)
+  eR = zeros(eltype(ψ[1]),N)
   for n in 1:N
     L, eL[n] = left_environment(H, ψ; tol=_solver_tol) #TODO currently computing two many of them
     R, eR[n] = right_environment(H, ψ; tol=_solver_tol) #TODO currently computing two many of them
@@ -427,8 +427,8 @@ function tdvp_iteration_parallel(
   Ãᴸ = InfiniteMPS(Vector{ITensor}(undef, N))
   Ãᴿ = InfiniteMPS(Vector{ITensor}(undef, N))
 
-  eL = zeros(1)
-  eR = zeros(1)
+  eL = zeros(eltype(ψ[1]),1)
+  eR = zeros(eltype(ψ[1]),1)
   L, eL[1] = left_environment(H, ψ; tol=_solver_tol) #TODO currently computing two many of them
   R, eR[1] = right_environment(H, ψ; tol=_solver_tol) #TODO currently computing two many of them
   for n in 1:N

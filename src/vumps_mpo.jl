@@ -18,8 +18,8 @@ function (A::AOᴸ)(x)
   l′ = linkinds(only, ψ′.AL)
   r = linkinds(only, ψ.AR)
   r′ = linkinds(only, ψ′.AR)
-  δˡ(n) = δ(Bool,l[n], l′[n])
-  δʳ(n) = δ(Bool,dag(r[n]), prime(r[n]))
+  δˡ(n) = δ(Bool, l[n], l′[n])
+  δʳ(n) = δ(Bool, dag(r[n]), prime(r[n]))
   xT = translatecell(translator(ψ), x, -1)
   for j in (2 - N):1
     xT = xT * H[j][n, n] * ψ.AL[j] * ψ′.AL[j]
@@ -37,7 +37,7 @@ function initialize_left_environment(
   Ls = Vector{ITensor}(undef, dₕ)
   Ls[1] = similar(ψ.AL[n], link, dag(prime(link)))
   if init_last
-    Ls[end] = denseblocks(δ(Bool,link, dag(prime(link))))
+    Ls[end] = denseblocks(δ(Bool, link, dag(prime(link))))
   else
     Ls[end] = similar(ψ.AL[n], link, dag(prime(link)))
   end
@@ -101,9 +101,9 @@ function left_environment(H::InfiniteBlockMPO, ψ::InfiniteCanonicalMPS; tol=1e-
   r = linkinds(only, ψ.AR)
   r′ = linkinds(only, ψ′.AR)
   s = siteinds(only, ψ)
-  δʳ(n) = δ(Bool,dag(r[n]), prime(r[n]))
-  δˡ(n) = δ(Bool,l[n], l′[n])
-  δˢ(n) = δ(Bool,dag(s[n]), prime(s[n]))
+  δʳ(n) = δ(Bool, dag(r[n]), prime(r[n]))
+  δˡ(n) = δ(Bool, l[n], l′[n])
+  δˢ(n) = δ(Bool, dag(s[n]), prime(s[n]))
 
   eₗ = [0.0]
   dₕ = size(H[1])[1]
@@ -168,8 +168,8 @@ function (A::AOᴿ)(x)
   l′ = linkinds(only, ψ′.AL)
   r = linkinds(only, ψ.AR)
   r′ = linkinds(only, ψ′.AR)
-  δˡ(n) = δ(Bool,l[n], l′[n])
-  δʳ(n) = δ(Bool,dag(r[n]), prime(r[n]))
+  δˡ(n) = δ(Bool, l[n], l′[n])
+  δʳ(n) = δ(Bool, dag(r[n]), prime(r[n]))
   xT = translatecell(translator(ψ), x, 1)
   for j in reverse(1:N)
     xT = xT * ψ.AR[j] * H[j][n, n] * ψ′.AR[j]
@@ -187,7 +187,7 @@ function initialize_right_environment(
   Rs = Vector{ITensor}(undef, dₕ)
   Rs[end] = similar(ψ.AR[n], link, dag(prime(link)))
   if init_first
-    Rs[1] = denseblocks(δ(Bool,link, dag(prime(link))))
+    Rs[1] = denseblocks(δ(Bool, link, dag(prime(link))))
   else
     Rs[1] = similar(ψ.AR[n], link, dag(prime(link)))
   end
@@ -252,9 +252,9 @@ function right_environment(H::InfiniteBlockMPO, ψ::InfiniteCanonicalMPS; tol=1e
   l = linkinds(only, ψ.AL)
   r = linkinds(only, ψ.AR)
   s = siteinds(only, ψ)
-  δʳ(n) = δ(Bool,dag(r[n]), prime(r[n]))
-  δˡ(n) = δ(Bool,l[n], dag(prime(l[n])))
-  δˢ(n) = δ(Bool,dag(s[n]), prime(s[n]))
+  δʳ(n) = δ(Bool, dag(r[n]), prime(r[n]))
+  δˡ(n) = δ(Bool, l[n], dag(prime(l[n])))
+  δˢ(n) = δ(Bool, dag(s[n]), prime(s[n]))
 
   eᵣ = [0.0]
   dₕ = size(H[1])[1]
@@ -365,8 +365,8 @@ function tdvp_iteration_sequential(
   Ãᴸ = InfiniteMPS(Vector{ITensor}(undef, N))
   Ãᴿ = InfiniteMPS(Vector{ITensor}(undef, N))
 
-  eL = zeros(eltype(ψ[1]),N)
-  eR = zeros(eltype(ψ[1]),N)
+  eL = zeros(eltype(ψ[1]), N)
+  eR = zeros(eltype(ψ[1]), N)
   for n in 1:N
     L, eL[n] = left_environment(H, ψ; tol=_solver_tol) #TODO currently computing two many of them
     R, eR[n] = right_environment(H, ψ; tol=_solver_tol) #TODO currently computing two many of them
@@ -427,8 +427,8 @@ function tdvp_iteration_parallel(
   Ãᴸ = InfiniteMPS(Vector{ITensor}(undef, N))
   Ãᴿ = InfiniteMPS(Vector{ITensor}(undef, N))
 
-  eL = zeros(eltype(ψ[1]),1)
-  eR = zeros(eltype(ψ[1]),1)
+  eL = zeros(eltype(ψ[1]), 1)
+  eR = zeros(eltype(ψ[1]), 1)
   L, eL[1] = left_environment(H, ψ; tol=_solver_tol) #TODO currently computing two many of them
   R, eR[1] = right_environment(H, ψ; tol=_solver_tol) #TODO currently computing two many of them
   for n in 1:N

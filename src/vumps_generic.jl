@@ -51,8 +51,8 @@ function (A::Aᴸ)(x)
   for k in (n - N + 1):n
     xT = xT * ψ.AL[k] * ψ̃.AL[k]
   end
-  δˡ = δ(Bool,l[n], l′[n])
-  δʳ = δ(Bool,r[n], r′[n])
+  δˡ = δ(Bool, l[n], l′[n])
+  δʳ = δ(Bool, r[n], r′[n])
   xR = x * ψ.C[n] * ψ′.C[n] * dag(δʳ) * denseblocks(δˡ)
   return xT - xR
 end
@@ -100,8 +100,8 @@ function (A::Aᴿ)(x)
     xT = xT * ψ.AR[k] * ψ̃.AR[k]
   end
   xT = translatecell(translator(ψ), xT, 1)
-  δˡ = δ(Bool,l[n], l′[n])
-  δʳ = δ(Bool,r[n], r′[n])
+  δˡ = δ(Bool, l[n], l′[n])
+  δʳ = δ(Bool, r[n], r′[n])
   xR = x * ψ.C[n] * ψ′.C[n] * δˡ * denseblocks(dag(δʳ))
   return xT - xR
 end

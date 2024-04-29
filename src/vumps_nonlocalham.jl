@@ -223,9 +223,9 @@ function left_environment(∑h::InfiniteSum{MPO}, ψ::InfiniteCanonicalMPS; tol=
   r = linkinds(only, ψ.AR)
   r′ = linkinds(only, ψ′.AR)
   s = siteinds(only, ψ)
-  δʳ(n) = δ(Bool,dag(r[n]), prime(r[n]))
-  δˡ(n) = δ(Bool,l[n], l′[n])
-  δˢ(n) = δ(Bool,dag(s[n]), prime(s[n]))
+  δʳ(n) = δ(Bool, dag(r[n]), prime(r[n]))
+  δˡ(n) = δ(Bool, l[n], l′[n])
+  δˢ(n) = δ(Bool, dag(s[n]), prime(s[n]))
   hᴸ = Vector{ITensor}(undef, Nsites)
   for k in 1:Nsites
     hᴸ[k] =
@@ -253,7 +253,7 @@ function left_environment(∑h::InfiniteSum{MPO}, ψ::InfiniteCanonicalMPS; tol=
   eᴸ = [(hᴸ[k] * ψ.C[k] * δʳ(k) * ψ′.C[k])[] for k in 1:Nsites]
   for k in 1:Nsites
     # TODO: remove `denseblocks` once BlockSparse + DiagBlockSparse is supported
-    hᴸ[k] -= eᴸ[k] * denseblocks(δ(Bool,inds(hᴸ[k])))
+    hᴸ[k] -= eᴸ[k] * denseblocks(δ(Bool, inds(hᴸ[k])))
   end
 
   𝕙ᴸ = copy(hᴸ)
@@ -284,9 +284,9 @@ function right_environment(∑h::InfiniteSum{MPO}, ψ::InfiniteCanonicalMPS; tol
   r = linkinds(only, ψ.AR)
   r′ = linkinds(only, ψ′.AR)
   s = siteinds(only, ψ)
-  δʳ(n) = δ(Bool,dag(r[n]), prime(r[n]))
-  δˡ(n) = δ(Bool,l[n], l′[n])
-  δˢ(n) = δ(Bool,dag(s[n]), prime(s[n]))
+  δʳ(n) = δ(Bool, dag(r[n]), prime(r[n]))
+  δˡ(n) = δ(Bool, l[n], l′[n])
+  δˢ(n) = δ(Bool, dag(s[n]), prime(s[n]))
 
   hᴿ = Vector{ITensor}(undef, Nsites)
   for k in 1:Nsites
@@ -305,7 +305,7 @@ function right_environment(∑h::InfiniteSum{MPO}, ψ::InfiniteCanonicalMPS; tol
   hᴿ = InfiniteMPS(hᴿ)
   eᴿ = [(hᴿ[k] * ψ.C[k] * δˡ(k) * ψ′.C[k])[] for k in 1:Nsites]
   for k in 1:Nsites
-    hᴿ[k] -= eᴿ[k] * denseblocks(δ(Bool,inds(hᴿ[k])))
+    hᴿ[k] -= eᴿ[k] * denseblocks(δ(Bool, inds(hᴿ[k])))
   end
 
   𝕙ᴿ = copy(hᴿ)
@@ -359,9 +359,9 @@ function tdvp_iteration_sequential(
     r = linkinds(only, ψ.AR)
     r′ = linkinds(only, ψ′.AR)
     s = siteinds(only, ψ)
-    δʳ(n) = δ(Bool,dag(r[n]), prime(r[n]))
-    δˡ(n) = δ(Bool,l[n], l′[n])
-    δˢ(n) = δ(Bool,dag(s[n]), prime(s[n]))
+    δʳ(n) = δ(Bool, dag(r[n]), prime(r[n]))
+    δˡ(n) = δ(Bool, l[n], l′[n])
+    δˢ(n) = δ(Bool, dag(s[n]), prime(s[n]))
 
     Hᴸ, eᴸ = left_environment(∑h, ψ; tol=_solver_tol)
     Hᴿ, eᴿ = right_environment(∑h, ψ; tol=_solver_tol)
@@ -432,9 +432,9 @@ function tdvp_iteration_parallel(
   r = linkinds(only, ψ.AR)
   r′ = linkinds(only, ψ′.AR)
   s = siteinds(only, ψ)
-  δʳ(n) = δ(Bool,dag(r[n]), prime(r[n]))
-  δˡ(n) = δ(Bool,l[n], l′[n])
-  δˢ(n) = δ(Bool,dag(s[n]), prime(s[n]))
+  δʳ(n) = δ(Bool, dag(r[n]), prime(r[n]))
+  δˡ(n) = δ(Bool, l[n], l′[n])
+  δˢ(n) = δ(Bool, dag(s[n]), prime(s[n]))
   Hᴸ, eᴸ = left_environment(∑h, ψ; tol=_solver_tol)
   Hᴿ, eᴿ = right_environment(∑h, ψ; tol=_solver_tol)
 

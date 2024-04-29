@@ -12,9 +12,9 @@ function generate_twobody_nullspace(
   l = linkinds(only, ψ.AL)
   r = linkinds(only, ψ.AR)
   s = siteinds(only, ψ)
-  δʳ(n) = δ(Bool,dag(r[n]), prime(r[n]))
-  δˢ(n) = δ(Bool,dag(s[n]), prime(s[n]))
-  δˡ(n) = δ(Bool,l[n], dag(prime(l[n])))
+  δʳ(n) = δ(Bool, dag(r[n]), prime(r[n]))
+  δˢ(n) = δ(Bool, dag(s[n]), prime(s[n]))
+  δˡ(n) = δ(Bool, l[n], dag(prime(l[n])))
 
   range_H = nrange(ψ, H[1])
 
@@ -104,9 +104,9 @@ function generate_twobody_nullspace(
   l = linkinds(only, ψ.AL)
   r = linkinds(only, ψ.AR)
   s = siteinds(only, ψ)
-  δʳ(n) = δ(Bool,dag(r[n]), prime(r[n]))
-  δˢ(n) = δ(Bool,dag(s[n]), prime(s[n]))
-  δˡ(n) = δ(Bool,l[n], dag(prime(l[n])))
+  δʳ(n) = δ(Bool, dag(r[n]), prime(r[n]))
+  δˢ(n) = δ(Bool, dag(s[n]), prime(s[n]))
+  δˡ(n) = δ(Bool, l[n], dag(prime(l[n])))
 
   range_H = nrange(H, 1)
   @assert range_H == 2 "Subspace expansion for InfiniteSum{ITensor} currently only works for 2-local Hamiltonians"
@@ -172,9 +172,9 @@ function subspace_expansion(
   l = linkinds(only, ψ.AL)
   r = linkinds(only, ψ.AR)
   s = siteinds(only, ψ)
-  δʳ(n) = δ(Bool,dag(r[n]), prime(r[n]))
-  δˢ(n) = δ(Bool,dag(s[n]), prime(s[n]))
-  δˡ(n) = δ(Bool,l[n], dag(prime(l[n])))
+  δʳ(n) = δ(Bool, dag(r[n]), prime(r[n]))
+  δˢ(n) = δ(Bool, dag(s[n]), prime(s[n]))
+  δˡ(n) = δ(Bool, l[n], dag(prime(l[n])))
 
   dˡ = dim(lⁿ¹)
   dʳ = dim(rⁿ¹)
@@ -258,13 +258,13 @@ function subspace_expansion(
     CL = combiner(newl; tags=tags(only(lⁿ¹)))
     newind = uniqueinds(CL, newl)
     newind = replacetags(newind, tags(only(newind)), tags(r[n1 - 1]))
-    temp = δ(Bool,dag(newind), newr)
+    temp = δ(Bool, dag(newind), newr)
     ALⁿ² *= CL
     ALⁿ² *= temp
     CR = combiner(newr; tags=tags(only(rⁿ¹)))
     newind = uniqueinds(CR, newr)
     newind = replacetags(newind, tags(only(newind)), tags(l[n2]))
-    temp = δ(Bool,dag(newind), newl)
+    temp = δ(Bool, dag(newind), newl)
     ARⁿ¹ *= CR
     ARⁿ¹ *= temp
     C = (C * dag(CL)) * dag(CR)

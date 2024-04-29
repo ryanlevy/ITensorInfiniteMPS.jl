@@ -9,10 +9,10 @@ function Base.:*(H::Hᶜ{ITensor}, v::ITensor)
   l′ = linkinds(only, ψ′.AL)
   r = linkinds(only, ψ.AR)
   r′ = linkinds(only, ψ′.AR)
-  δˡ = δ(Bool,l[n], l′[n])
-  δˡ⁻¹ = δ(Bool,l[n - 1], l′[n - 1])
-  δʳ = δ(Bool,r[n], r′[n])
-  δʳ⁺¹ = δ(Bool,r[n + 1], r′[n + 1])
+  δˡ = δ(Bool, l[n], l′[n])
+  δˡ⁻¹ = δ(Bool, l[n - 1], l′[n - 1])
+  δʳ = δ(Bool, r[n], r′[n])
+  δʳ⁺¹ = δ(Bool, r[n + 1], r′[n + 1])
   Hᶜᴸv = v * Hᴸ[n] * dag(δʳ)
   Hᶜᴿv = v * δˡ * Hᴿ[n]
   Hᶜʰv =
@@ -37,9 +37,9 @@ function Base.:*(H::Hᴬᶜ{ITensor}, v::ITensor)
   s = siteinds(only, ψ)
   s′ = siteinds(only, ψ′)
 
-  δˢ(n) = δ(Bool,s[n], s′[n])
-  δˡ(n) = δ(Bool,l[n], l′[n])
-  δʳ(n) = δ(Bool,r[n], r′[n])
+  δˢ(n) = δ(Bool, s[n], s′[n])
+  δˡ(n) = δ(Bool, l[n], l′[n])
+  δʳ(n) = δ(Bool, r[n], r′[n])
 
   Hᴬᶜᴸv = v * Hᴸ[n - 1] * dag(δˢ(n)) * dag(δʳ(n))
   Hᴬᶜᴿv = v * δˡ(n - 1) * dag(δˢ(n)) * Hᴿ[n]
@@ -83,7 +83,7 @@ function tdvp_iteration_sequential(
   eᴿ = Vector{type}(undef, Nsites)
   for n in 1:Nsites
     hᴸ = InfiniteMPS([
-      δ(Bool,only(l[k - 2]), only(l′[k - 2])) *
+      δ(Bool, only(l[k - 2]), only(l′[k - 2])) *
       ψ.AL[k - 1] *
       ψ.AL[k] *
       ∑h[(k - 1, k)] *
@@ -91,7 +91,7 @@ function tdvp_iteration_sequential(
       ψ′.AL[k] for k in 1:Nsites
     ])
     hᴿ = InfiniteMPS([
-      δ(Bool,only(dag(r[k + 2])), only(dag(r′[k + 2]))) *
+      δ(Bool, only(dag(r[k + 2])), only(dag(r′[k + 2]))) *
       ψ.AR[k + 2] *
       ψ.AR[k + 1] *
       ∑h[(k + 1, k + 2)] *
@@ -99,13 +99,14 @@ function tdvp_iteration_sequential(
       ψ′.AR[k + 1] for k in 1:Nsites
     ])
     eᴸ = [
-      (hᴸ[k] * ψ.C[k] * δ(Bool,only(dag(r[k])), only(dag(r′[k]))) * ψ′.C[k])[] for k in 1:Nsites
+      (hᴸ[k] * ψ.C[k] * δ(Bool, only(dag(r[k])), only(dag(r′[k]))) * ψ′.C[k])[] for
+      k in 1:Nsites
     ]
-    eᴿ = [(hᴿ[k] * ψ.C[k] * δ(Bool,only(l[k]), only(l′[k])) * ψ′.C[k])[] for k in 1:Nsites]
+    eᴿ = [(hᴿ[k] * ψ.C[k] * δ(Bool, only(l[k]), only(l′[k])) * ψ′.C[k])[] for k in 1:Nsites]
     for k in 1:Nsites
       # TODO: remove `denseblocks` once BlockSparse + DiagBlockSparse is supported
-      hᴸ[k] -= eᴸ[k] * denseblocks(δ(Bool,inds(hᴸ[k])))
-      hᴿ[k] -= eᴿ[k] * denseblocks(δ(Bool,inds(hᴿ[k])))
+      hᴸ[k] -= eᴸ[k] * denseblocks(δ(Bool, inds(hᴸ[k])))
+      hᴿ[k] -= eᴿ[k] * denseblocks(δ(Bool, inds(hᴿ[k])))
     end
 
     function left_environment_cell(ψ, ψ̃, hᴸ, n)
@@ -208,7 +209,7 @@ function tdvp_iteration_parallel(
   r′ = CelledVector([commoninds(ψ′.AR[n], ψ′.AR[n + 1]) for n in 1:Nsites])
 
   hᴸ = InfiniteMPS([
-    δ(Bool,only(l[n - 2]), only(l′[n - 2])) *
+    δ(Bool, only(l[n - 2]), only(l′[n - 2])) *
     ψ.AL[n - 1] *
     ψ.AL[n] *
     ∑h[(n - 1, n)] *
@@ -217,7 +218,7 @@ function tdvp_iteration_parallel(
   ])
 
   hᴿ = InfiniteMPS([
-    δ(Bool,only(dag(r[n + 2])), only(dag(r′[n + 2]))) *
+    δ(Bool, only(dag(r[n + 2])), only(dag(r′[n + 2]))) *
     ψ.AR[n + 2] *
     ψ.AR[n + 1] *
     ∑h[(n + 1, n + 2)] *
@@ -226,17 +227,18 @@ function tdvp_iteration_parallel(
   ])
 
   eᴸ = [
-    (hᴸ[n] * ψ.C[n] * δ(Bool,only(dag(r[n])), only(dag(r′[n]))) * ψ′.C[n])[] for n in 1:Nsites
+    (hᴸ[n] * ψ.C[n] * δ(Bool, only(dag(r[n])), only(dag(r′[n]))) * ψ′.C[n])[] for
+    n in 1:Nsites
   ]
-  eᴿ = [(hᴿ[n] * ψ.C[n] * δ(Bool,only(l[n]), only(l′[n])) * ψ′.C[n])[] for n in 1:Nsites]
+  eᴿ = [(hᴿ[n] * ψ.C[n] * δ(Bool, only(l[n]), only(l′[n])) * ψ′.C[n])[] for n in 1:Nsites]
 
   for n in 1:Nsites
     # TODO: use these instead, for now can't subtract
     # BlockSparse and DiagBlockSparse tensors
     #hᴸ[n] -= eᴸ[n] * δ(Bool,inds(hᴸ[n]))
     #hᴿ[n] -= eᴿ[n] * δ(Bool,inds(hᴿ[n]))
-    hᴸ[n] -= eᴸ[n] * denseblocks(δ(Bool,inds(hᴸ[n])))
-    hᴿ[n] -= eᴿ[n] * denseblocks(δ(Bool,inds(hᴿ[n])))
+    hᴸ[n] -= eᴸ[n] * denseblocks(δ(Bool, inds(hᴸ[n])))
+    hᴿ[n] -= eᴿ[n] * denseblocks(δ(Bool, inds(hᴿ[n])))
   end
 
   # Sum the Hamiltonian terms in the unit cell

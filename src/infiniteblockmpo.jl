@@ -256,7 +256,7 @@ function combineblocks_linkinds_auxiliary(H::InfiniteBlockMPO)
       for k in 1:size(H[j + 1], 2)
         if isempty(H[j + 1][d, k])
           H[j + 1][d, k] = similar(
-             H[1], uniqueinds(H[j + 1][d, k], dag(right_link))..., dag(comb_ind)
+            H[1], uniqueinds(H[j + 1][d, k], dag(right_link))..., dag(comb_ind)
           )
         else
           H[j + 1][d, k] = H[j + 1][d, k] * dag(comb)
